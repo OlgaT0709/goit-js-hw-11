@@ -4,16 +4,28 @@
     </a>
     <div class="info">
         <p class="info-item">
-            <b>Likes </b></br> {{likes}}
+            <b>Likes </b></br> 
+            {{#if likes}}
+            {{likes}}
+            {{/if}}
         </p>
         <p class="info-item">
-            <b>Views </b></br> {{views}}
+            <b>Views </b></br> 
+            {{#if views}}
+            {{views}}
+            {{/if}}
         </p>
         <p class="info-item">
-            <b>Comments </b></br> {{comments}}
+            <b>Comments </b></br> 
+            {{#if comments}}
+            {{comments}}
+            {{/if}}
         </p>
         <p class="info-item">
-            <b>Downloads </b></br> {{downloads}}
+            <b>Downloads </b></br> 
+            {{#if downloads}}
+            {{downloads}}
+            {{/if}}
         </p>
     </div>
 </div>
