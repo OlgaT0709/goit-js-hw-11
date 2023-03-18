@@ -3,13 +3,13 @@ import Notiflix from 'notiflix';
 class Notifier {
   constructor() {
     Notiflix.Notify.init({
-      width: '80%',
+      width: '50%',
       opacity: 1,
-      fontSize: '16px',
-      position: 'top',
+      fontSize: '14px',
+      position: 'center-top',
+      timeout: 1000,
       useIcon: false,
       borderRadius: '3px',
-      fontFamily: 'Roboto Mono',
       info: {
         background: '#d7d7d7',
         textColor: '#333',

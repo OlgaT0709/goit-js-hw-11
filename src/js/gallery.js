@@ -1,9 +1,10 @@
-import notifier from './notifler'
-import markupTpl from '../partials/markup.hbs';
+import notifier from './service/notifler'
+import markup from './service/markup'; 
+import fetchPhoto from './fetchphoto';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css"
 
-import fetchPhoto from './fetchphoto';
+
 
 const refs = {
     searchForm: document.querySelector('#search-form'),
@@ -19,25 +20,18 @@ function onSearchSubmit(event) {
     event.preventDefault();
     refs.galleryContainer.innerHTML = '' // стартово прибираємо розмітку
     const photo = event.currentTarget.elements.searchQuery.value.trim(); // прибираються зайві пробіли
-    if (!photo) {
-        return; // якщо пустая строка, запит не відправляється
-            }
-    fetchPhoto(photo)  
+    if (!photo) {return;} // якщо пустая строка, запит не відправляється
+            
+    fetchPhoto(photo)  // додаємо розмітку, якщо щось введно і знайшло
         .then(photo => {
             
             const galleryItems = photo.hits;
-            if (photo.hits.length === 0) {
+            if (galleryItems.length === 0) {
                 notifier.warning("Sorry, there are no images matching your search query. Please try again.")
                 return;
             }
             
-            refs.galleryContainer.insertAdjacentHTML('beforeend', createGalary(galleryItems))
-
-            function createGalary(galleryItems) {
-                return galleryItems.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => 
-                    markupTpl({ webformatURL, largeImageURL, tags, likes, views, comments, downloads })
-                ).join('');
-            };
+            refs.galleryContainer.insertAdjacentHTML('beforeend', markup(galleryItems))
 
             // створюємо модалку і передаємо велику картинку 
             new SimpleLightbox('.gallery a');

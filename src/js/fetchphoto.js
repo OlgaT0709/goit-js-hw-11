@@ -1,4 +1,5 @@
 import axios, { isCancel, AxiosError } from 'axios';
+import searchParamsStringify from './service/searchParamsStringify'
 
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '34510807-7acb17c6314b40594d9f36171'
@@ -26,11 +27,4 @@ export default function fetchPhoto(photo) {
             })
 };
 
-// перетворюємо обєкт searchParams в строку
-function searchParamsStringify(searchParams) {
-    let queryString = '';
-    for (let key in searchParams) {
-    queryString += `${key}=${searchParams[key]}&`;
-    }
-    return queryString = queryString.slice(0, -1); // удалить последний символ &
-}
+
