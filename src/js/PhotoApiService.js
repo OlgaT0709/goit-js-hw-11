@@ -36,9 +36,7 @@ class PhotoApiService {
             .then(data => {
                 this.#incrementPage();
                 this.viewedPhoto += data.hits.length;
-                console.log(data);
                 return data;
-                
             })
             .catch(error => {
                 notifier.error('Something went wrong. Please try later');
@@ -55,7 +53,7 @@ class PhotoApiService {
         //     })
     };
 
- 
+     
     resetViewedPhoto() {
         this.viewedPhoto = 0;
     }

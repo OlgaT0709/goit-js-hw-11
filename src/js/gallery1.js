@@ -28,15 +28,19 @@ function onSearchSubmit(event) {
     refs.galleryContainer.innerHTML = ''; // стартово прибираємо розмітку
     loadMoreBtn.hide();
     photoApiService.query = event.currentTarget.elements.searchQuery.value.trim(); //trim прибираються зайві пробіли
-    if (photoApiService.query === '') {
+    if (photoApiService.query === '') { // перевіряємо чи взагалі щось введено 
         notifier.info("No request. Please try again.")
         return;
     }
     photoApiService.resetPage();
     photoApiService.resetViewedPhoto();
-    photoApiService.fetchPhoto().then(appendPhotoMarkUp);
-    refs.searchForm.reset();
-    searchBtn.disabled();
+
+    photoApiService.fetchPhoto()
+        .then(appendPhotoMarkUp)
+        .finally(refs.searchForm.reset(),
+                searchBtn.disabled()
+                );
+    
 }
     
 function onLoadMoreClick() {
@@ -48,12 +52,8 @@ function onLoadMoreClick() {
 };
 
 function appendPhotoMarkUp(photo) {
-    // if (!photo.hits) {
-    //     return;
-    // } 
-     
-    if (photo.hits.length === 0) {
-        notifier.warning("Sorry, there are no images matching your search query. Please try again.")
+    if (photo.hits.length === 0) { // перевіряємо чи щось знайдено 
+        notifier.error("Sorry, there are no images matching your search query. Please try again.")
         return;
     }
     

@@ -11,8 +11,20 @@ class Notifier {
       useIcon: false,
       borderRadius: '3px',
       info: {
-        background: '#d7d7d7',
-        textColor: '#333',
+      background: '#4c4cff',
+      textColor: '#fff',
+      },
+      warning: {
+      background: '#ffa500',
+      textColor: '#333',
+      },
+      success: {
+      background: '#00b300',
+      textColor: '#fff',
+      },
+      error: {
+      background: '#ff3333',
+      textColor: '#fff',
       },
     });
   }
