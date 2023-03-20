@@ -2,12 +2,14 @@ import axios from 'axios';
 import searchParamsStringify from './service/searchParamsStringify';
 import notifier from './service/notifler';
 
-//клас робить HTTP-запит на ресурс і повертає масив фото
+//клас робить HTTP-запит на ресурс і повертає дані (об'єкт)
 
-export default class PhotoApiService {
+class PhotoApiService {
     constructor() {
         this.searchQuery = '';
         this.pageNumber = 1;
+        this.viewedPhoto = 0;
+        this.perPage = 40;
     }
 
     fetchPhoto() {
@@ -22,7 +24,7 @@ export default class PhotoApiService {
         orientation: 'horizontal',
         safesearch: true,
         page: this.pageNumber,
-        per_page: 40,
+        per_page: this.perPage,
     }
 
     const queryString = searchParamsStringify(searchParams);
@@ -32,8 +34,11 @@ export default class PhotoApiService {
                 return response.data;
             })
             .then(data => {
-                this.incrementPage()
-                return data.hits;
+                this.#incrementPage();
+                this.viewedPhoto += data.hits.length;
+                console.log(data);
+                return data;
+                
             })
             .catch(error => {
                 notifier.error('Something went wrong. Please try later');
@@ -50,7 +55,13 @@ export default class PhotoApiService {
         //     })
     };
 
-    incrementPage() {
+ 
+    resetViewedPhoto() {
+        this.viewedPhoto = 0;
+    }
+
+
+    #incrementPage() {
         this.pageNumber += 1;
     }
 
@@ -69,5 +80,5 @@ export default class PhotoApiService {
 }
 
 
-
+export default new PhotoApiService();
 

@@ -17,6 +17,13 @@
     display: flex;
     gap: 4px;
 }   
+
+.back {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    color: white;
+}
  
 .load-more {
     display: block;

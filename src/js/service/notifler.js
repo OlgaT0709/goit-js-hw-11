@@ -7,7 +7,7 @@ class Notifier {
       opacity: 1,
       fontSize: '14px',
       position: 'center-top',
-      timeout: 1000,
+      timeout: 2000,
       useIcon: false,
       borderRadius: '3px',
       info: {
