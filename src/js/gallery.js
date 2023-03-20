@@ -4,7 +4,7 @@ import PhotoApiService from './PhotoApiService';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css"
 
-
+// синтаксис async/await - потрібно розібратися
 
 const refs = {
     searchForm: document.querySelector('#search-form'),
@@ -31,28 +31,28 @@ function onSearchSubmit(event) {
     photoApiService.resetPage();
     photoApiService.fetchPhoto().then(appendPhotoMarkUp);
     refs.searchForm.reset();
+
 }
     
 function onLoadMoreClick() {
     refs.buttonLoadMore.textContent = 'Loading...';
     photoApiService.fetchPhoto().then(appendPhotoMarkUp);
-    refs.buttonLoadMore.textContent = 'Load more';
+    // refs.buttonLoadMore.textContent = 'Load more';
 };
 
 function appendPhotoMarkUp(photo) {
     if (!photo) {
         return;
-    } // якщо пустая строка, запит не відправляється
+    } 
             
     if (photo.length === 0) {
         notifier.warning("Sorry, there are no images matching your search query. Please try again.")
         return;
     }
             
-    refs.galleryContainer.insertAdjacentHTML('beforeend', markup(photo));
+    refs.galleryContainer.insertAdjacentHTML('beforeend', markup(photo));  
     refs.buttonLoadMore.classList.remove('is-hidden');
-    refs.buttonLoadMore.classList.add('animation');                 
-                        
+      refs.buttonLoadMore.textContent = 'Load more';                    
     // створюємо модалку і передаємо велику картинку 
     new SimpleLightbox('.gallery a');
 
