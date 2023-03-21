@@ -1,4 +1,4 @@
-import markupTpl from './markup.hbs';
+import markupTpl from '../templates/markup.hbs';
 
 export default function markup(galleryItems) {
     return galleryItems.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>

@@ -1,7 +1,7 @@
 import notifier from './service/notifler'
-import markup from './service/markup'; 
+import markup from './markup'; 
 import photoApiService from './PhotoApiService';
-import NewBtn from './newbutton';
+import NewBtn from './service/newbutton';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css"
 import debounce from 'lodash.debounce';

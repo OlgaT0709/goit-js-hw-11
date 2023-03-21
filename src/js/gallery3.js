@@ -81,17 +81,3 @@ function appendPhotoMarkUp(photo) {
     }
     notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
 }
-    //   плавне прокручування сторінки до кінця після запиту і відтворення кожної наступної групи зображень
-    // refs.galleryContainer.scrollIntoView({
-    // behavior: 'smooth',
-    // block: 'end',
-    // }); 
-
-    
-    
-
-        
-       
-
-        
-
