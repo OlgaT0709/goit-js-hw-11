@@ -1,10 +1,14 @@
 import notifier from './service/notifler'
-import markup from './markup'; 
 import photoApiService from './PhotoApiService';
 import NewBtn from './service/newbutton';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css"
 import debounce from 'lodash.debounce';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import markupTpl from '../templates/markupAOS.hbs';
+
+AOS.init();
 
 const DEBOUNCE_DELAY = 300;
 
@@ -70,7 +74,10 @@ function appendPhotoMarkUp(photo) {
     notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
 }
     
-
+function markup(galleryItems) {
+    return galleryItems.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+            markupTpl ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads })).join('');
+};
     
     
 
