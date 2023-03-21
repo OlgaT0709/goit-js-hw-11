@@ -1,6 +1,5 @@
 import axios from 'axios';
 import searchParamsStringify from './service/searchParamsStringify';
-import notifier from './service/notifler';
 
 //клас робить HTTP-запит на ресурс і повертає дані (об'єкт)
 
@@ -38,12 +37,7 @@ class PhotoApiService {
                 this.viewedPhoto += data.hits.length;
                 return data;
             })
-            .catch(error => {
-                notifier.error('Something went wrong. Please try later');
-                throw new Error(error.response.status);
             
-            })
-     
       
         // Якщо не використовувати axios
         // return fetch(`${BASE_URL}?${queryString}`).then(response => {
@@ -51,6 +45,8 @@ class PhotoApiService {
         //     }
         //     return response.json();
         //     })
+
+        // .catch((error) => console.log(error));
     };
 
      

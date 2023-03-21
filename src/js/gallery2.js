@@ -46,6 +46,7 @@ function onSearchSubmit(event) {
 
     photoApiService.fetchPhoto()
         .then(appendPhotoMarkUp)
+        .catch(catchError)
         .finally(refs.searchForm.reset(),
                 searchBtn.disabled()
     );
@@ -66,7 +67,7 @@ function appendPhotoMarkUp(photo) {
     const gallery = new SimpleLightbox('.gallery a'); // створюємо модалку і передаємо велику картинку
     gallery.refresh(); // Refresh Imag
     
-   if (photoApiService.viewedPhoto === photo.totalHits) {
+   if (photoApiService.viewedPhoto >= photo.totalHits) {
        notifier.warning(`We're sorry, but you've reached the end of search results. Total ${photo.totalHits}. `);
        observer.disconnect(); // знімаємо обзервер, так як показали все
        return;
@@ -79,7 +80,11 @@ function markup(galleryItems) {
             markupTpl ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads })).join('');
 };
     
+function catchError(error) {
+        notifier.error('Something went wrong. Please try later');
+        throw new Error(console.log(error));
     
+    }
 
         
        

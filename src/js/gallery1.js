@@ -37,6 +37,7 @@ function onSearchSubmit(event) {
 
     photoApiService.fetchPhoto()
         .then(appendPhotoMarkUp)
+        .catch(catchError)
         .finally(refs.searchForm.reset(),
                 searchBtn.disabled()
                 );
@@ -46,7 +47,7 @@ function onSearchSubmit(event) {
 function onLoadMoreClick() {
     
     loadMoreBtn.textContent ('Loading...');
-    photoApiService.fetchPhoto().then(appendPhotoMarkUp);
+    photoApiService.fetchPhoto().then(appendPhotoMarkUp).catch(catchError);
       
      
 };
@@ -74,13 +75,22 @@ function appendPhotoMarkUp(photo) {
     const gallery = new SimpleLightbox('.gallery a'); // створюємо модалку і передаємо велику картинку
     gallery.refresh(); // Refresh Imag
     
-   if (photoApiService.viewedPhoto === photo.totalHits) {
+   if (photoApiService.viewedPhoto >= photo.totalHits) {
        notifier.info(`We're sorry, but you've reached the end of search results. Total ${photo.totalHits}. `);
        loadMoreBtn.hide();
        return;
     }
     notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
+
+    
+     
 }
+
+function catchError(error) {
+        notifier.error('Something went wrong. Please try later');
+        throw new Error(console.log(error));
+    
+    }
     //   плавне прокручування сторінки до кінця після запиту і відтворення кожної наступної групи зображень
     // refs.galleryContainer.scrollIntoView({
     // behavior: 'smooth',
