@@ -7,10 +7,12 @@
 
     enable() {
         this.button.disabled = false;
+        this.button.classList.add('hover');
     }
 
     disabled() {
         this.button.disabled = true;
+        this.button.classList.remove('hover');
     }
 
     show() {

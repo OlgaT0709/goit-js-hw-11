@@ -29,7 +29,7 @@ function onSearchSubmit(event) {
     loadMoreBtn.hide();
     photoApiService.query = event.currentTarget.elements.searchQuery.value.trim(); //trim прибираються зайві пробіли
     if (photoApiService.query === '') { // перевіряємо чи взагалі щось введено 
-        notifier.info("No request. Please try again.")
+        notifier.warning("No request. Please try again.")
         return;
     }
     photoApiService.resetPage();
@@ -75,7 +75,7 @@ function appendPhotoMarkUp(photo) {
     gallery.refresh(); // Refresh Imag
     
    if (photoApiService.viewedPhoto === photo.totalHits) {
-       notifier.warning(`We're sorry, but you've reached the end of search results. Total ${photo.totalHits}. `);
+       notifier.info(`We're sorry, but you've reached the end of search results. Total ${photo.totalHits}. `);
        loadMoreBtn.hide();
        return;
     }

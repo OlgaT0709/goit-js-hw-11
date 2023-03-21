@@ -1,15 +1,30 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
 
-html,
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     width: 100%;
     margin: 0;
+    background-image:
+            linear-gradient(to right,
+                rgba(206, 216, 216, 0.7),
+                rgba(206, 216, 216, 0.7)),
+            url("../images/backgroundimg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+
     background-color: rgb(206, 216, 216);
+    
     font-family: "Roboto", sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
     color: rgb(35, 34, 34);
+
 }
 
 .visually-hidden {

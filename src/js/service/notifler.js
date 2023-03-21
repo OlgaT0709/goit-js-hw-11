@@ -11,16 +11,16 @@ class Notifier {
       useIcon: false,
       borderRadius: '3px',
       info: {
-      background: '#4c4cff',
-      textColor: '#fff',
+      background: '#d7d7d7',
+      textColor: '#333',
       },
       warning: {
       background: '#ffa500',
       textColor: '#333',
       },
       success: {
-      background: '#00b300',
-      textColor: '#fff',
+      background: '#d7d7d7',
+      textColor: '#333',
       },
       error: {
       background: '#ff3333',
