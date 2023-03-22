@@ -30,6 +30,9 @@ class PhotoApiService {
         
         return axios.get(`${BASE_URL}?${queryString}`)
             .then(response => {
+                // if (!response.ok) {
+                //     throw new Error(response.status);
+                // };
                 return response.data;
             })
             .then(data => {

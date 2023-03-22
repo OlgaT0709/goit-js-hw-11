@@ -1,10 +1,14 @@
 import notifier from './service/notifler'
-import markup from './markup'; 
 import photoApiService from './PhotoApiService';
 import NewBtn from './service/newbutton';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css"
 import debounce from 'lodash.debounce';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import markupTpl from '../templates/markupAOS.hbs';
+
+AOS.init();
 
 const DEBOUNCE_DELAY = 300;
 
@@ -16,8 +20,9 @@ const refs = {
           
 };
 
+const gallery = new SimpleLightbox('.gallery a'); // створюємо модалку і передаємо велику картинку
 const searchBtn = new NewBtn({ selector: '.search-form__button', hidden: false, text: 'Search' });
-const observer = new IntersectionObserver((entries) => {
+const observer = new IntersectionObserver((entries) => { 
     for (const entry of entries) {
         if (entry.isIntersecting && photoApiService.pageNumber > 1) {
             photoApiService.fetchPhoto().then(appendPhotoMarkUp);
@@ -59,22 +64,29 @@ function appendPhotoMarkUp(photo) {
     }
     
     refs.galleryContainer.insertAdjacentHTML('beforeend', markup(photo.hits));  
-
-    const gallery = new SimpleLightbox('.gallery a'); // створюємо модалку і передаємо велику картинку
     gallery.refresh(); // Refresh Imag
+    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
     
    if (photoApiService.viewedPhoto >= photo.totalHits) {
        notifier.warning(`We're sorry, but you've reached the end of search results. Total ${photo.totalHits}. `);
        observer.disconnect(); // знімаємо обзервер, так як показали все
        return;
     }
-    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
+    
 }
+    
+function markup(galleryItems) {
+    return galleryItems.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) =>
+            markupTpl ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads })).join('');
+};
     
 function catchError(error) {
         notifier.error('Something went wrong. Please try later');
         throw new Error(console.log(error));
     
     }
-    
-    
+
+       
+
+        
+

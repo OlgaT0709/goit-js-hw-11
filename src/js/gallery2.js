@@ -20,8 +20,9 @@ const refs = {
           
 };
 
+const gallery = new SimpleLightbox('.gallery a'); // створюємо модалку і передаємо велику картинку
 const searchBtn = new NewBtn({ selector: '.search-form__button', hidden: false, text: 'Search' });
-const observer = new IntersectionObserver((entries) => {
+const observer = new IntersectionObserver((entries) => { 
     for (const entry of entries) {
         if (entry.isIntersecting && photoApiService.pageNumber > 1) {
             photoApiService.fetchPhoto().then(appendPhotoMarkUp);
@@ -63,16 +64,15 @@ function appendPhotoMarkUp(photo) {
     }
     
     refs.galleryContainer.insertAdjacentHTML('beforeend', markup(photo.hits));  
-
-    const gallery = new SimpleLightbox('.gallery a'); // створюємо модалку і передаємо велику картинку
     gallery.refresh(); // Refresh Imag
+    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
     
    if (photoApiService.viewedPhoto >= photo.totalHits) {
        notifier.warning(`We're sorry, but you've reached the end of search results. Total ${photo.totalHits}. `);
        observer.disconnect(); // знімаємо обзервер, так як показали все
        return;
     }
-    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
+    
 }
     
 function markup(galleryItems) {
