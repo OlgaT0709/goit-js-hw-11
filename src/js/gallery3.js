@@ -24,7 +24,7 @@ loadMoreBtn.button.addEventListener('click', onLoadMoreClick);
 refs.input.addEventListener('input', debounce((() => searchBtn.enable()), DEBOUNCE_DELAY) );
 
 
-function onSearchSubmit(event) {
+async function onSearchSubmit(event) {
     event.preventDefault(); // прибираємо дефолтову поведінку
     refs.galleryContainer.innerHTML = ''; // стартово прибираємо розмітку
     loadMoreBtn.hide();
@@ -36,21 +36,30 @@ function onSearchSubmit(event) {
     photoApiService.resetPage();
     photoApiService.resetViewedPhoto();
 
-    photoApiService.fetchPhoto()
-        .then(appendPhotoMarkUp)
-        .catch(catchError)
-        .finally(refs.searchForm.reset(),
-                searchBtn.disabled()
-                );
+    try {
+        const photo = await photoApiService.fetchPhoto();
+        appendPhotoMarkUp(photo);
+    } catch (error) {
+        catchError(error);
+    } finally {
+        refs.searchForm.reset();
+        searchBtn.disabled();
+    };
     
 }
     
-function onLoadMoreClick() {
+async function onLoadMoreClick() {
     
-    loadMoreBtn.textContent ('Loading...');
-    photoApiService.fetchPhoto().then(appendPhotoMarkUp).catch(catchError);
-      
-     
+    loadMoreBtn.textContent('Loading...');
+    try {
+        const photo = await photoApiService.fetchPhoto();
+        appendPhotoMarkUp(photo);
+    } catch (error) {
+        catchError(error);
+    } finally {
+        loadMoreBtn.textContent('Load more'); 
+    };
+           
 };
 
 function appendPhotoMarkUp(photo) {
@@ -78,7 +87,7 @@ function appendPhotoMarkUp(photo) {
     }  
 
     loadMoreBtn.show(); // Показуємо кнопку loadMore
-    loadMoreBtn.textContent('Load more');  
+  
     notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
      
 }

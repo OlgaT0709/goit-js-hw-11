@@ -14,19 +14,32 @@ class PhotoApiService {
         this.perPage = 40;
     }
 
-    fetchPhoto() {
+    // fetchPhoto() { 
+    //     return axios.get(queryString)
+    //         .then(response => response.data)
+    //         .then(data => {
+    //             this.#incrementPage();
+    //             this.viewedPhoto += data.hits.length;
+    //             return data;
+    //         })
+    // };
+
+    async fetchPhoto() {    
 
         const queryString = this.getPage()
-        
-        return axios.get(queryString)
-            .then(response => response.data)
-            .then(data => {
-                this.#incrementPage();
-                this.viewedPhoto += data.hits.length;
-                return data;
-            })
-    };
-
+        try {
+            const response = await axios.get(queryString);
+            const data = response.data;
+            this.#incrementPage();
+            this.viewedPhoto += data.hits.length;
+            return data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+    
+            
     getPage() {
         if ( this.viewedPhoto >= this.totalHits) {
             return null;
@@ -47,6 +60,7 @@ class PhotoApiService {
 
     
 };
+
 
     #incrementPage() {
         this.pageNumber += 1;

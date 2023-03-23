@@ -55,18 +55,18 @@ function onSearchSubmit(event) {
     refs.searchForm.reset();
     searchBtn.disabled();
 
-    function onLoad() {
+    
+}
+ 
+function onLoad() { // підгружаю сторінку
         photoApiService.fetchPhoto()
             .then((photo) => {
-                console.log(photo);
                 infScroll.option.path = () => photoApiService.getPage(); // Передаю в путь наступну сторінку
                 return appendPhotoMarkUp(photo);
             })
             .catch(catchError);
     };
-   
-}
- 
+
 function appendPhotoMarkUp(photo) {
        
     if (photo.hits.length === 0) { // перевіряємо чи щось знайдено 
