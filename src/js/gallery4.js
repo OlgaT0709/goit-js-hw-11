@@ -24,6 +24,7 @@ const infScroll = new InfiniteScroll('.gallery', {
  
     path: () => photoApiService.getPage() ,
     append: '.photo-card--aos',
+    // dataType: 'json', ничего не меняет
     
     button: undefined,
     // Enables a button to load pages on click
@@ -50,23 +51,22 @@ function onSearchSubmit(event) {
     photoApiService.resetPage();
     photoApiService.resetViewedPhoto();
 
-
     infScroll.on('loadOnScroll', onLoad());
+    refs.searchForm.reset();
+    searchBtn.disabled();
 
     function onLoad() {
         photoApiService.fetchPhoto()
             .then((photo) => {
+                console.log(photo);
                 infScroll.option.path = () => photoApiService.getPage(); // Передаю в путь наступну сторінку
                 return appendPhotoMarkUp(photo);
             })
             .catch(catchError);
     };
-        
-    refs.searchForm.reset();
-    searchBtn.disabled();
+   
 }
-    
-
+ 
 function appendPhotoMarkUp(photo) {
        
     if (photo.hits.length === 0) { // перевіряємо чи щось знайдено 

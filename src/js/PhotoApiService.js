@@ -42,16 +42,11 @@ class PhotoApiService {
             per_page: this.perPage,
         };
         
-        return this.#getQueryString(searchParams);
+        const queryString = searchParamsStringify(searchParams);
+        return `${BASE_URL}?${queryString}`;
 
     
 };
-
-     
-    #getQueryString(searchParams) {
-    const queryString = searchParamsStringify(searchParams);
-    return `${BASE_URL}?${queryString}`;
-    }
 
     #incrementPage() {
         this.pageNumber += 1;
