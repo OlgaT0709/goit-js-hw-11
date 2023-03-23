@@ -16,8 +16,7 @@ class PhotoApiService {
 
     // fetchPhoto() { 
     //     return axios.get(queryString)
-    //         .then(response => response.data)
-    //         .then(data => {
+    //         .then(({data}) => {
     //             this.#incrementPage();
     //             this.viewedPhoto += data.hits.length;
     //             return data;
@@ -56,7 +55,7 @@ class PhotoApiService {
         return `${BASE_URL}?${queryString}`;
 
     
-};
+    };
 
 
     #incrementPage() {

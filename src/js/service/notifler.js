@@ -3,11 +3,11 @@ import Notiflix from 'notiflix';
 class Notifier {
   constructor() {
     Notiflix.Notify.init({
-      width: '50%',
+      // width: '50%',
       opacity: 1,
       fontSize: '14px',
-      position: 'center-top',
-      timeout: 2000,
+      // position: 'center-top',
+      timeout: 1000,
       useIcon: false,
       borderRadius: '3px',
       info: {

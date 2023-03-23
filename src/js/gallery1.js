@@ -87,7 +87,7 @@ function appendPhotoMarkUp(photo) {
 
 function catchError(error) {
         notifier.error('Something went wrong. Please try later');
-        console.log(error);
+        console.error(error);
     
     }
     //   плавне прокручування сторінки до кінця після запиту і відтворення кожної наступної групи зображень

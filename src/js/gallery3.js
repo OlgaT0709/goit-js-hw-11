@@ -94,7 +94,7 @@ function appendPhotoMarkUp(photo) {
 
 function catchError(error) {
         notifier.error('Something went wrong. Please try later');
-        console.log(error);
+        console.error(error);
     
     }
 
