@@ -25,7 +25,9 @@ const searchBtn = new NewBtn({ selector: '.search-form__button', hidden: false, 
 const observer = new IntersectionObserver((entries) => { 
     for (const entry of entries) {
         if (entry.isIntersecting && photoApiService.pageNumber > 1) {
-            photoApiService.fetchPhoto().then(appendPhotoMarkUp);
+            photoApiService.fetchPhoto()
+                .then(appendPhotoMarkUp)
+                .catch(catchError);
         }
     }
 }, { rootMargin: '400px' });
@@ -65,13 +67,13 @@ function appendPhotoMarkUp(photo) {
     
     refs.galleryContainer.insertAdjacentHTML('beforeend', markup(photo.hits));  
     gallery.refresh(); // Refresh Imag
-    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
     
    if (photoApiService.viewedPhoto >= photo.totalHits) {
        notifier.warning(`We're sorry, but you've reached the end of search results. Total ${photo.totalHits}. `);
        observer.disconnect(); // знімаємо обзервер, так як показали все
        return;
     }
+    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
     
 }
     
@@ -82,7 +84,7 @@ function markup(galleryItems) {
     
 function catchError(error) {
         notifier.error('Something went wrong. Please try later');
-        throw new Error(console.log(error));
+        console.log(error);
     
     }
 

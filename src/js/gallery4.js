@@ -4,6 +4,7 @@ import NewBtn from './service/newbutton';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css"
 import debounce from 'lodash.debounce';
+import InfiniteScroll from 'infinite-scroll';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import markupTpl from '../templates/markupAOS.hbs';
@@ -16,23 +17,27 @@ const refs = {
     searchForm: document.querySelector('#search-form'),
     input: document.querySelector('.search-form__input'),
     galleryContainer: document.querySelector('.gallery'),
-    loadMoreBtn: document.querySelector('.load-more'),
           
 };
 
+const infScroll = new InfiniteScroll('.gallery', {
+ 
+    path: () => photoApiService.getPage() ,
+    append: '.photo-card--aos',
+    
+    button: undefined,
+    // Enables a button to load pages on click
+    // button: '.load-next-button'
+
+    debug: true,
+  
+});
+
 const gallery = new SimpleLightbox('.gallery a'); // створюємо модалку і передаємо велику картинку
 const searchBtn = new NewBtn({ selector: '.search-form__button', hidden: false, text: 'Search' });
-const observer = new IntersectionObserver((entries) => { 
-    for (const entry of entries) {
-        if (entry.isIntersecting && photoApiService.pageNumber > 1) {
-            photoApiService.fetchPhoto().then(appendPhotoMarkUp);
-        }
-    }
-}, { rootMargin: '400px' });
 
 refs.searchForm.addEventListener('submit', onSearchSubmit);
-refs.input.addEventListener('input', debounce((() => searchBtn.enable()), DEBOUNCE_DELAY) );
-
+refs.input.addEventListener('input', debounce((() => searchBtn.enable()), DEBOUNCE_DELAY));
 
 function onSearchSubmit(event) {
     event.preventDefault(); // прибираємо дефолтову поведінку
@@ -45,14 +50,20 @@ function onSearchSubmit(event) {
     photoApiService.resetPage();
     photoApiService.resetViewedPhoto();
 
-    photoApiService.fetchPhoto()
-        .then(appendPhotoMarkUp)
-        .catch(catchError)
-        .finally(refs.searchForm.reset(),
-                searchBtn.disabled()
-    );
-    
-    observer.observe(refs.loadMoreBtn); // вішаємо обзервер для можливості скролу 
+
+    infScroll.on('loadOnScroll', onLoad());
+
+    function onLoad() {
+        photoApiService.fetchPhoto()
+            .then((photo) => {
+                infScroll.option.path = () => photoApiService.getPage(); // Передаю в путь наступну сторінку
+                return appendPhotoMarkUp(photo);
+            })
+            .catch(catchError);
+    };
+        
+    refs.searchForm.reset();
+    searchBtn.disabled();
 }
     
 
@@ -65,14 +76,13 @@ function appendPhotoMarkUp(photo) {
     
     refs.galleryContainer.insertAdjacentHTML('beforeend', markup(photo.hits));  
     gallery.refresh(); // Refresh Imag
-    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
     
    if (photoApiService.viewedPhoto >= photo.totalHits) {
        notifier.warning(`We're sorry, but you've reached the end of search results. Total ${photo.totalHits}. `);
-       observer.disconnect(); // знімаємо обзервер, так як показали все
+       infScroll.destroy(); // зупиняємо скролл, так як показали все
        return;
     }
-    
+    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
 }
     
 function markup(galleryItems) {
@@ -82,7 +92,7 @@ function markup(galleryItems) {
     
 function catchError(error) {
         notifier.error('Something went wrong. Please try later');
-        throw new Error(console.log(error));
+        console.log(error);
     
     }
 

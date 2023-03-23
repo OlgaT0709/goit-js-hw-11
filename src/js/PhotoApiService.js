@@ -1,6 +1,9 @@
 import axios from 'axios';
 import searchParamsStringify from './service/searchParamsStringify';
 
+const BASE_URL = 'https://pixabay.com/api/';
+const API_KEY = '34510807-7acb17c6314b40594d9f36171';
+
 //клас робить HTTP-запит на ресурс і повертає дані (об'єкт)
 
 class PhotoApiService {
@@ -13,50 +16,42 @@ class PhotoApiService {
 
     fetchPhoto() {
 
-    const BASE_URL = 'https://pixabay.com/api/';
-    const API_KEY = '34510807-7acb17c6314b40594d9f36171';
-
-    const searchParams = {
-        key: API_KEY,
-        q: this.searchQuery,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: true,
-        page: this.pageNumber,
-        per_page: this.perPage,
-    }
-
-    const queryString = searchParamsStringify(searchParams);
+        const queryString = this.getPage()
         
-        return axios.get(`${BASE_URL}?${queryString}`)
-            .then(response => {
-                // if (!response.ok) {
-                //     throw new Error(response.status);
-                // };
-                return response.data;
-            })
+        return axios.get(queryString)
+            .then(response => response.data)
             .then(data => {
                 this.#incrementPage();
                 this.viewedPhoto += data.hits.length;
                 return data;
             })
-            
-      
-        // Якщо не використовувати axios
-        // return fetch(`${BASE_URL}?${queryString}`).then(response => {
-        //     if (!response.ok) { throw new Error(response.status);
-        //     }
-        //     return response.json();
-        //     })
-
-        // .catch((error) => console.log(error));
     };
 
-     
-    resetViewedPhoto() {
-        this.viewedPhoto = 0;
-    }
+    getPage() {
+        if ( this.viewedPhoto >= this.totalHits) {
+            return null;
+        }
+            
+        const searchParams = {
+            key: API_KEY,
+            q: this.searchQuery,
+            image_type: 'photo',
+            orientation: 'horizontal',
+            safesearch: true,
+            page: this.pageNumber,
+            per_page: this.perPage,
+        };
+        
+        return this.#getQueryString(searchParams);
 
+    
+};
+
+     
+    #getQueryString(searchParams) {
+    const queryString = searchParamsStringify(searchParams);
+    return `${BASE_URL}?${queryString}`;
+    }
 
     #incrementPage() {
         this.pageNumber += 1;
@@ -64,6 +59,10 @@ class PhotoApiService {
 
     resetPage() {
         this.pageNumber = 1;
+    }
+
+    resetViewedPhoto() {
+        this.viewedPhoto = 0;
     }
 
     get query() {

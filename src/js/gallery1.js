@@ -48,7 +48,9 @@ function onSearchSubmit(event) {
 function onLoadMoreClick() {
     
     loadMoreBtn.textContent ('Loading...');
-    photoApiService.fetchPhoto().then(appendPhotoMarkUp).catch(catchError);
+    photoApiService.fetchPhoto()
+        .then(appendPhotoMarkUp)
+        .catch(catchError);
       
      
 };
@@ -61,10 +63,7 @@ function appendPhotoMarkUp(photo) {
     
     refs.galleryContainer.insertAdjacentHTML('beforeend', markup(photo.hits));
     gallery.refresh(); // Refresh Imag
-    loadMoreBtn.show(); // Показуємо кнопку loadMore
-    loadMoreBtn.textContent('Load more');  
-    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
-
+    
     if (photoApiService.pageNumber > 2) {
         //   плавне прокручування сторінки після запиту і відтворення кожної наступної групи зображень
         const { height: cardHeight } = refs.galleryContainer.firstElementChild.getBoundingClientRect();
@@ -79,12 +78,16 @@ function appendPhotoMarkUp(photo) {
        loadMoreBtn.hide();
        return;
     }  
+
+    loadMoreBtn.show(); // Показуємо кнопку loadMore
+    loadMoreBtn.textContent('Load more');  
+    notifier.success(`Hooray! ${photoApiService.viewedPhoto} images for you from ${photo.totalHits} !`);
      
 }
 
 function catchError(error) {
         notifier.error('Something went wrong. Please try later');
-        throw new Error(console.log(error));
+        console.log(error);
     
     }
     //   плавне прокручування сторінки до кінця після запиту і відтворення кожної наступної групи зображень
