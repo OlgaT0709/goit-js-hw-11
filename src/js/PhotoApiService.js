@@ -26,7 +26,7 @@ class PhotoApiService {
 
     async fetchPhoto() {    
 
-        const queryString = this.getPage()
+        const queryString = this.#getPage()
         try {
             const response = await axios.get(queryString);
             const data = response.data;
@@ -40,10 +40,7 @@ class PhotoApiService {
     }
     
             
-    getPage() {
-        if ( this.viewedPhoto >= this.totalHits) {
-            return null;
-        }
+    #getPage() {
             
         const searchParams = {
             key: API_KEY,
