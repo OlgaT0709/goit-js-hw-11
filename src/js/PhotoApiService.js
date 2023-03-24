@@ -28,7 +28,7 @@ class PhotoApiService {
         const queryString = this.#getPage()
         try {
             const response = await axios.get(queryString);
-            const data = response.data;
+            const data = await response.data;
             this.#incrementPage();
             this.viewedPhoto += data.hits.length;
             return data;
